@@ -1,0 +1,2 @@
+# speedtest
+Learn GO
