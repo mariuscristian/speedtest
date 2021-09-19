@@ -2,7 +2,7 @@ package speedtest
 
 import (
 	"errors"
-	"github.com/mariuscristian/speedtest/domain"
+	"github.com/mariuscristian/speedtest/measurement"
 	"github.com/showwin/speedtest-go/speedtest"
 	"log"
 )
@@ -10,13 +10,13 @@ import (
 type ooklaSpeedTestClient struct {
 }
 
-func NewOoklaSpeedTestClient() domain.SpeedTestClient {
+func NewOoklaSpeedTestClient() measurement.SpeedTestClient {
 	log.Println("[ookla] creating client")
 	return &ooklaSpeedTestClient{}
 }
 
 // Measure - performs the speed measurement
-func (c ooklaSpeedTestClient) Measure() domain.SpeedTestResult {
+func (c ooklaSpeedTestClient) Measure() measurement.SpeedTestResult {
 	log.Println("[ookla] starting measurement")
 	user, _ := speedtest.FetchUserInfo()
 	serverList, _ := speedtest.FetchServerList(user)
@@ -26,23 +26,23 @@ func (c ooklaSpeedTestClient) Measure() domain.SpeedTestResult {
 		log.Printf("[ookla] measurement for host %v\n", s.Host)
 		err := s.PingTest()
 		if err != nil {
-			return domain.SpeedTestResult{Err: errors.New("ookla ping test failed")}
+			return measurement.SpeedTestResult{Err: errors.New("ookla ping test failed")}
 		}
 		err = s.DownloadTest(false)
 		if err != nil {
-			return domain.SpeedTestResult{Err: errors.New("ookla download speed test failed")}
+			return measurement.SpeedTestResult{Err: errors.New("ookla download speed test failed")}
 		}
 		err = s.UploadTest(false)
 		if err != nil {
-			return domain.SpeedTestResult{Err: errors.New("ookla upload speed test failed")}
+			return measurement.SpeedTestResult{Err: errors.New("ookla upload speed test failed")}
 		}
 
-		return domain.SpeedTestResult{Download: s.DLSpeed, Upload: s.ULSpeed}
+		return measurement.SpeedTestResult{Download: s.DLSpeed, Upload: s.ULSpeed}
 	}
-	return domain.SpeedTestResult{Err: errors.New("ookla speed test failed")}
+	return measurement.SpeedTestResult{Err: errors.New("ookla speed test failed")}
 }
 
 // GetMethod - checks the api used for the speed measurement
-func (c ooklaSpeedTestClient) GetMethod() domain.SpeedTestServerType {
-	return domain.Ookla
+func (c ooklaSpeedTestClient) GetMethod() measurement.SpeedTestServerType {
+	return measurement.Ookla
 }

@@ -3,7 +3,7 @@ package speedtest
 import (
 	"context"
 	"errors"
-	"github.com/mariuscristian/speedtest/domain"
+	"github.com/mariuscristian/speedtest/measurement"
 	"go.jonnrb.io/speedtest/fastdotcom"
 	"go.jonnrb.io/speedtest/units"
 	"log"
@@ -21,13 +21,13 @@ type fastdotcomSpeedTestClient struct {
 	uploadSpeed   float64
 }
 
-func NewFastdotcomSpeedTestClient() domain.SpeedTestClient {
+func NewFastdotcomSpeedTestClient() measurement.SpeedTestClient {
 	log.Println("[netflix] creating client")
 	return &fastdotcomSpeedTestClient{}
 }
 
 // Measure - performs the speed measurement
-func (fc fastdotcomSpeedTestClient) Measure() domain.SpeedTestResult {
+func (fc fastdotcomSpeedTestClient) Measure() measurement.SpeedTestResult {
 	log.Println("[netflix] starting measurement")
 	var client fastdotcom.Client
 
@@ -36,25 +36,25 @@ func (fc fastdotcomSpeedTestClient) Measure() domain.SpeedTestResult {
 
 	m, err := fastdotcom.GetManifest(ctx, urlCount)
 	if err != nil {
-		return domain.SpeedTestResult{Err: errors.New("fast.com speed test config failed")}
+		return measurement.SpeedTestResult{Err: errors.New("fast.com speed test config failed")}
 	}
 
 	err = fc.testDownload(m, &client)
 	if err != nil {
-		return domain.SpeedTestResult{Err: errors.New("fast.com speed test download failed")}
+		return measurement.SpeedTestResult{Err: errors.New("fast.com speed test download failed")}
 	}
 
 	err = fc.testUpload(m, &client)
 	if err != nil {
-		return domain.SpeedTestResult{Err: errors.New("fast.com speed test upload failed")}
+		return measurement.SpeedTestResult{Err: errors.New("fast.com speed test upload failed")}
 	}
 
-	return domain.SpeedTestResult{Download: fc.downloadSpeed, Upload: fc.uploadSpeed}
+	return measurement.SpeedTestResult{Download: fc.downloadSpeed, Upload: fc.uploadSpeed}
 }
 
 // GetMethod - checks the api used for the speed measurement
-func (fc fastdotcomSpeedTestClient) GetMethod() domain.SpeedTestServerType {
-	return domain.Netflix
+func (fc fastdotcomSpeedTestClient) GetMethod() measurement.SpeedTestServerType {
+	return measurement.Netflix
 }
 
 func (fc *fastdotcomSpeedTestClient) testDownload(m *fastdotcom.Manifest, client *fastdotcom.Client) error {

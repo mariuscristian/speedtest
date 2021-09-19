@@ -1,4 +1,4 @@
-package domain
+package measurement
 
 type SpeedTestServerType int
 

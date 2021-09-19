@@ -1,19 +1,12 @@
 package main
 
 import (
-	"github.com/mariuscristian/speedtest/domain"
-	"github.com/mariuscristian/speedtest/ports/output/speedtest"
+	"github.com/mariuscristian/speedtest/measurement"
+	"github.com/mariuscristian/speedtest/ports/input"
 )
 
-func InitMeasurement() domain.SpeedTestUseCase {
-	return domain.NewSpeedMeasureUseCase([]domain.SpeedTestClient{
-		speedtest.NewOoklaSpeedTestClient(),
-		speedtest.NewFastdotcomSpeedTestClient(),
-	})
-}
-
 func main() {
-	speedProbe := InitMeasurement()
-	speedProbe.MeasureSpeed(domain.Ookla)
-	speedProbe.MeasureSpeed(domain.Netflix)
+	speedProbe := init.Measurements()
+	speedProbe.MeasureSpeed(measurement.Ookla)
+	speedProbe.MeasureSpeed(measurement.Netflix)
 }
