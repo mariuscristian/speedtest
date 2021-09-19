@@ -4,14 +4,13 @@ This module can be used to test download and upload speeds using
 - Netflix's https://fast.com/
 
 ## Go API
-
+To use the library in your go application, get the package through
 ```
-go get github.com/mariuscristian/speedtest
+go get -d github.com/mariuscristian/speedtest
 ```
 
 ## API Usage
-
-Initialize the speed test use cases and then run the test by the method type
+Initialize the speed test use cases and then run the test using the 2 available measurement types
 
 ```go
 package main
