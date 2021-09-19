@@ -3,7 +3,7 @@ package speedtest
 import (
 	"context"
 	"errors"
-	"github.com/mariuscristian/speedtest/measurement"
+	"github.com/mariuscristian/speedtest/domain/measurement"
 	"go.jonnrb.io/speedtest/fastdotcom"
 	"go.jonnrb.io/speedtest/units"
 	"log"

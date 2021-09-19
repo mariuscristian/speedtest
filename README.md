@@ -11,17 +11,20 @@ go get github.com/mariuscristian/speedtest
 
 ## API Usage
 
-Initialize the speed test use cases
+Initialize the speed test use cases and then run the test by the method type
+
 ```go
 package main
 
 import (
-	"github.com/mariuscristian/speedtest"
+	"github.com/mariuscristian/speedtest/config"
+	"github.com/mariuscristian/speedtest/domain/measurement"
 )
+
 func main() {
-	speedProbe := InitMeasurement()
-	speedProbe.MeasureSpeed(domain.Ookla)
-	speedProbe.MeasureSpeed(domain.Netflix)
+	speedProbe := config.InitMeasurements()
+	speedProbe.MeasureSpeed(measurement.Ookla)
+	speedProbe.MeasureSpeed(measurement.Netflix)
 }
 ```
 

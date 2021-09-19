@@ -2,7 +2,7 @@ package speedtest
 
 import (
 	"errors"
-	"github.com/mariuscristian/speedtest/measurement"
+	"github.com/mariuscristian/speedtest/domain/measurement"
 	"github.com/showwin/speedtest-go/speedtest"
 	"log"
 )

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/mariuscristian/speedtest/config"
-	"github.com/mariuscristian/speedtest/measurement"
+	"github.com/mariuscristian/speedtest/domain/measurement"
 )
 
 func main() {
