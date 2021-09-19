@@ -2,36 +2,47 @@ package speedtest
 
 import (
 	"errors"
-	"fmt"
 	"github.com/mariuscristian/speedtest/domain"
 	"github.com/showwin/speedtest-go/speedtest"
+	"log"
 )
 
 type ooklaSpeedTestClient struct {
 }
 
 func NewOoklaSpeedTestClient() domain.SpeedTestClient {
-	fmt.Println("creating ookla client")
+	log.Println("[ookla] creating client")
 	return &ooklaSpeedTestClient{}
 }
 
-func (o ooklaSpeedTestClient) Measure() domain.SpeedTestResult {
-	fmt.Println("starting ookla measurement")
+// Measure - performs the speed measurement
+func (c ooklaSpeedTestClient) Measure() domain.SpeedTestResult {
+	log.Println("[ookla] starting measurement")
 	user, _ := speedtest.FetchUserInfo()
 	serverList, _ := speedtest.FetchServerList(user)
 	targets, _ := serverList.FindServer([]int{})
 
 	for _, s := range targets {
-		fmt.Printf("ookla measurement for host %v\n", s.Host)
-		s.PingTest()
-		s.DownloadTest(false)
-		s.UploadTest(false)
-		fmt.Printf("Latency: %s, Download: %f, Upload: %f\n", s.Latency, s.DLSpeed, s.ULSpeed)
+		log.Printf("[ookla] measurement for host %v\n", s.Host)
+		err := s.PingTest()
+		if err != nil {
+			return domain.SpeedTestResult{Err: errors.New("ookla ping test failed")}
+		}
+		err = s.DownloadTest(false)
+		if err != nil {
+			return domain.SpeedTestResult{Err: errors.New("ookla download speed test failed")}
+		}
+		err = s.UploadTest(false)
+		if err != nil {
+			return domain.SpeedTestResult{Err: errors.New("ookla upload speed test failed")}
+		}
+
 		return domain.SpeedTestResult{Download: s.DLSpeed, Upload: s.ULSpeed}
 	}
 	return domain.SpeedTestResult{Err: errors.New("ookla speed test failed")}
 }
 
-func (o ooklaSpeedTestClient) GetMethod() domain.SpeedTestServerType {
+// GetMethod - checks the api used for the speed measurement
+func (c ooklaSpeedTestClient) GetMethod() domain.SpeedTestServerType {
 	return domain.Ookla
 }
